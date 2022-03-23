@@ -43,6 +43,7 @@ var mobileValidator = [
 
 const userSchema = mongoose.Schema({
     name:{type:String,minlength:2},
+    book:{type:String},
     username : { type: String,  minlength:3},
     mobilenumber : { type: String,  validate: mobileValidator},
     email : { type: String, validate: emailValidator},

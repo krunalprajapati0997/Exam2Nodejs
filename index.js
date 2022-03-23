@@ -14,7 +14,7 @@ mongoose.connect('mongodb://localhost:27017/Exam2')
 const conn = mongoose.connection
 console.log('connection Succesfully');
 
-const app = express('');
+const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors())

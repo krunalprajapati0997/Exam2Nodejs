@@ -26,10 +26,55 @@ module.exports = function (router) {
     // router.get('/',(req,res)=>{
     //     res.send('Hey_____This Is get')
     // })
-    router.post('/', (req, res) => {
+    // router.post('/', (req, res) => {
+    //     upload(req, res, function (err) {
+    //         console.log("req.file---", req.file);
+    //         console.log("req.body", req.body)
+    //         if (err) {
+    //             if (err.code === 'LIMIT_FILE_SIZE') {
+    //                 res.json({ success: false, message: 'Profile Image too large !!!' });
+    //             } else if (err.code === 'filetype') {
+    //                 res.json({ success: false, message: 'Invaild : Only jpeg, jpg and png supported !!!' });
+    //             } else {
+    //                 console.log(err);
+    //                 res.json({ success: false, message: 'Profile Image not upload !!!' });
+    //             }
+    //         } else {
+    //             if (!req.file) {
+    //                 res.json({ success: false, message: 'No file selected !!!' });
+    //             } else {
+    //                 let user = new User();
+
+    //                 user.name = req.body.name
+
+    //                 user.password = req.body.password;
+    //                 user.email = req.body.email;
+    //                 user.mobilenumber = req.body.mobilenumber;
+    //                 user.profile_file = req.file.filename;
+    //                 user.profile_url = "http://localhost:8009/uploads/" + req.file.filename;
+    //                 user.save(function (err) {
+    //                     if (err) {
+    //                         console.log(err.errors.username);
+    //                         if (err.errors.username) {
+    //                             res.json({ success: false, message: "Name is required" });
+    //                         }
+    //                         else {
+    //                             res.json({ success: false, message: err });
+    //                         }
+    //                     } else {
+    //                         res.json({ success: true, message: 'Registration Successfully' });
+    //                     }
+    //                 });
+    //             }
+    //         }
+    //     })
+
+    // })
+
+    router.post('/addbook', (req, res) => {
         upload(req, res, function (err) {
             console.log("req.file---", req.file);
-            console.log("req.body",req.body)
+            console.log("req.body", req.body)
             if (err) {
                 if (err.code === 'LIMIT_FILE_SIZE') {
                     res.json({ success: false, message: 'Profile Image too large !!!' });
@@ -43,15 +88,15 @@ module.exports = function (router) {
                 if (!req.file) {
                     res.json({ success: false, message: 'No file selected !!!' });
                 } else {
-                    let user = new User();
+                    let user = new User()
 
-                    user.name=req.body.name
-                   
-                    user.password=req.body.password;
-                    user.email=req.body.email;
-                    user.mobilenumber=req.body.mobilenumber;
+                    user.book = req.body.book
+                    user.description = req.body.description
+                    user.quantities = req.body.quantities
+                    user.price = req.body.price
                     user.profile_file = req.file.filename;
-                    user.profile_url = "http://localhost:8009/uploads/"+req.file.filename;
+                    user.profile_url = "http://localhost:8009/uploads/" + req.file.filename;
+                    user.temporarytoken = jwt.sign({ email: user.email }, secret, { expiresIn: '24h' });
                     user.save(function (err) {
                         if (err) {
                             console.log(err.errors.username);
@@ -70,11 +115,41 @@ module.exports = function (router) {
         })
 
     })
+    // router.post('/addbook', (req, res) => {
+    //     upload(req, res, function (err) {
+    //         console.log("hey_________", req.file);
+    //         console.log('hey_________', req.body);
+    //         {
+    //             let user = new User()
 
+    //             user.book = req.body.book
+    //             user.description = req.body.description
+    //             user.quantities = req.body.quantities
+    //             user.price = req.body.price
+    //             user.profile_file = req.file.filename;
+    //             user.profile_url = "http://localhost:8009/uploads/" + req.file.filename;
+    //             user.temporarytoken = jwt.sign({ email: user.email }, secret, { expiresIn: '24h' });
+    //             user.save(function (err) {
+    //                 if (err) {
+    //                     console.log(err.errors.username);
+    //                     if (err.errors.username) {
+    //                         res.json({ success: false, message: "Name is required" });
+    //                     }
+    //                     else {
+    //                         res.json({ success: false, message: err });
+    //                     }
+    //                 } else {
+    //                     res.json({ success: true, message: 'Registration Successfully' });
+    //                 }
+    //             });
+    //         }
+    //     })
+
+    // })
     router.post('/book', (req, res) => {
         upload(req, res, function (err) {
             console.log("req.file---", req.file);
-            console.log("req.body",req.body)
+            console.log("req.body", req.body)
             if (err) {
                 if (err.code === 'LIMIT_FILE_SIZE') {
                     res.json({ success: false, message: 'Profile Image too large !!!' });
@@ -87,15 +162,21 @@ module.exports = function (router) {
             } else {
                 if (!req.file) {
                     res.json({ success: false, message: 'No file selected !!!' });
-                } else 
-                {
+                } else {
                     let user = new User()
+
+                    user.book = req.body.book
                     user.name = req.body.name
+                    user.username = req.body.username
+                    user.mobilenumber = req.body.mobilenumber
+                    user.email = req.body.email
+                    user.password = req.body.password
                     user.description = req.body.description
                     user.quantities = req.body.quantities
-                    user.price=req.body.price
-                    user.profile_file= req.file.filename;
-                    user.profile_url = "http://localhost:8009/uploads/"+ req.file.filename;
+                    user.price = req.body.price
+                    user.profile_file = req.file.filename;
+                    user.profile_url = "http://localhost:8009/uploads/" + req.file.filename;
+                    user.temporarytoken = jwt.sign({ email: user.email }, secret, { expiresIn: '24h' });
                     user.save(function (err) {
                         if (err) {
                             console.log(err.errors.username);
@@ -116,42 +197,42 @@ module.exports = function (router) {
     })
 
 
-    router.post('/userlist', (req, res) => {
+    // router.post('/userlist', (req, res) => {
 
-    var user = new User();
+    //     var user = new User();
 
-        user.name = req.body.name
-        user.username = req.body.username
-        user.mobilenumber = req.body.mobilenumber
-        user.email = req.body.email
-        user.password = req.body.password
-        
+    //     user.name = req.body.name
+    //     user.username = req.body.username
+    //     user.mobilenumber = req.body.mobilenumber
+    //     user.email = req.body.email
+    //     user.password = req.body.password
 
-        if (req.body.name == null || req.body.username == null || req.body.mobilenumber == "" || req.body.email == null||req.body.password ==null ) {
-            res.json({ success: false, message: 'Ensure Username,  password and email were provided' });
-        } else {
-            user.save(function (err) {
-                if (err) {
-                    if (err.errors != null) {
-                        if (err.errors.username) {
-                            res.json({ success: false, message: 'Required minimum digits 3 of User Name' });
-                        } else if (err.errors.email) {
-                            res.json({ success: false, message: err.errors.email.message });
-                        } else if (err.errors.password) {
-                            res.json({ success: false, message: err.errors.password.message });
-                        }
-                    } else {
-                        res.json({ success: false, message: err });
-                    }
-                } else {
-                    res.json({ success: true, message: 'Successfully Registered !' });
-                }
-            })
-        }
 
-    });
+    //     if (req.body.name == null || req.body.username == null || req.body.mobilenumber == "" || req.body.email == null || req.body.password == null) {
+    //         res.json({ success: false, message: 'Ensure Username,  password and email were provided' });
+    //     } else {
+    //         user.save(function (err) {
+    //             if (err) {
+    //                 if (err.errors != null) {
+    //                     if (err.errors.username) {
+    //                         res.json({ success: false, message: 'Required minimum digits 3 of User Name' });
+    //                     } else if (err.errors.email) {
+    //                         res.json({ success: false, message: err.errors.email.message });
+    //                     } else if (err.errors.password) {
+    //                         res.json({ success: false, message: err.errors.password.message });
+    //                     }
+    //                 } else {
+    //                     res.json({ success: false, message: err });
+    //                 }
+    //             } else {
+    //                 res.json({ success: true, message: 'Successfully Registered !' });
+    //             }
+    //         })
+    //     }
 
-    
+    // });
+
+
     router.post('/', (req, res) => {
 
 
@@ -164,9 +245,10 @@ module.exports = function (router) {
         user.mobilenumber = req.body.mobilenumber
         user.email = req.body.email
         user.password = req.body.password
-        
 
-        if (req.body.name == null || req.body.username == null || req.body.mobilenumber == "" || req.body.email == null||req.body.password ==null ) {
+
+
+        if (req.body.name == null || req.body.username == null || req.body.mobilenumber == "" || req.body.email == null || req.body.password == null) {
             res.json({ success: false, message: 'Ensure Username,  password and email were provided' });
         } else {
             user.save(function (err) {
@@ -190,52 +272,51 @@ module.exports = function (router) {
 
     });
 
-    router.post('/userlist', (req, res) => {
+    // router.post('/userlist', (req, res) => {
 
-      var user = new User();
+    //     var user = new User();
 
-        user.name = req.body.name
-        user.username = req.body.username
-        user.mobilenumber = req.body.mobilenumber
-        user.email = req.body.email
-        
-       
-       
-
-        if (req.body.name == null || req.body.username == null || req.body.mobilenumber == "" || req.body.email == null  ) {
-            res.json({ success: false, message: 'Ensure Username,mobilenumber  and email were provided' });
-        } 
-        else
-         {
-            user.save(function (err) {
-                if (err) {
-                    if (err.errors != null) {
-                        if (err.errors.username) {
-                            res.json({ success: false, message: 'Required minimum digits 3 of User Name' });
-                        }
-                         else if (err.errors.email) {
-                            res.json({ success: false, message: err.errors.email.message });
-                        } 
-                        // else if (err.errors.password) {
-                        //     res.json({ success: false, message: err.errors.password.message });
-                        // }
-                    } else {
-                        res.json({ success: false, message: err });
-                    }
-                } else {
-                    res.json({ success: true, message: 'Successfully Registered !' });
-                }
-            })
-        }
-
-    });
-
-    
+    //     user.name = req.body.name
+    //     user.username = req.body.username
+    //     user.mobilenumber = req.body.mobilenumber
+    //     user.email = req.body.email
 
 
-    
 
-    
+
+    //     if (req.body.name == null || req.body.username == null || req.body.mobilenumber == "" || req.body.email == null) {
+    //         res.json({ success: false, message: 'Ensure Username,mobilenumber  and email were provided' });
+    //     }
+    //     else {
+    //         user.save(function (err) {
+    //             if (err) {
+    //                 if (err.errors != null) {
+    //                     if (err.errors.username) {
+    //                         res.json({ success: false, message: 'Required minimum digits 3 of User Name' });
+    //                     }
+    //                     else if (err.errors.email) {
+    //                         res.json({ success: false, message: err.errors.email.message });
+    //                     }
+    //                     // else if (err.errors.password) {
+    //                     //     res.json({ success: false, message: err.errors.password.message });
+    //                     // }
+    //                 } else {
+    //                     res.json({ success: false, message: err });
+    //                 }
+    //             } else {
+    //                 res.json({ success: true, message: 'Successfully Registered !' });
+    //             }
+    //         })
+    //     }
+
+    // });
+
+
+
+
+
+
+
 
 
     router.post('/login', function (req, res) {
@@ -283,22 +364,22 @@ module.exports = function (router) {
         });
     })
 
-    router.use(function (req, res, next) {
+    // router.use(function (req, res, next) {
 
-        var token = req.body.token || req.body.query || req.headers['x-access-token'];
-        if (token) {
-            jwt.verify(token, secret, function (err, decoded) {
-                if (err) {
-                    res.json({ success: false, message: 'Token invalid' });
-                } else {
-                    req.decoded = decoded;
-                    next();
-                }
-            });
-        } else {
-            res.json({ success: false, message: 'No token provided' });
-        }
-    });
+    //     var token = req.body.token || req.body.query || req.headers['x-access-token'];
+    //     if (token) {
+    //         jwt.verify(token, secret, function (err, decoded) {
+    //             if (err) {
+    //                 res.json({ success: false, message: 'Token invalid' });
+    //             } else {
+    //                 req.decoded = decoded;
+    //                 next();
+    //             }
+    //         });
+    //     } else {
+    //         res.json({ success: false, message: 'No token provided' });
+    //     }
+    // });
 
     router.get('/', function (req, res) {
         User.find({}, function (err, user) {
@@ -311,39 +392,39 @@ module.exports = function (router) {
         });
     });
 
-    router.get('/book', function(req, res) { 
-        User.find({}, function(err, user) {
-            if (err) throw err;
-            if (!user) {
-                res.json({ success: false, message: 'No user found' });
-            } else {
-                res.json({ success: true, user: user });
-            }
-        });
-       
-    });
+    // router.get('/book', function (req, res) {
+    //     User.find({}, function (err, user) {
+    //         if (err) throw err;
+    //         if (!user) {
+    //             res.json({ success: false, message: 'No user found' });
+    //         } else {
+    //             res.json({ success: true, user: user });
+    //         }
+    //     });
 
-    router.get('/userlist', function (req, res) {
-        User.find({}, function (err, user) {
-            if (err) throw err;
-            if (!user) {
-                res.json({ success: false, message: 'No user found' });
-            } else {
-                res.json({ success: true, user: user });
-            }
-        });
-    });
+    // });
 
-    router.get('/myprofile', function (req, res) {
-        User.find({}, function (err, user) {
-            if (err) throw err;
-            if (!user) {
-                res.json({ success: false, message: 'No user found' });
-            } else {
-                res.json({ success: true, user: user });
-            }
-        });
-    });
+    // router.get('/userlist', function (req, res) {
+    //     User.find({}, function (err, user) {
+    //         if (err) throw err;
+    //         if (!user) {
+    //             res.json({ success: false, message: 'No user found' });
+    //         } else {
+    //             res.json({ success: true, user: user });
+    //         }
+    //     });
+    // });
+
+    // router.get('/myprofile', function (req, res) {
+    //     User.find({}, function (err, user) {
+    //         if (err) throw err;
+    //         if (!user) {
+    //             res.json({ success: false, message: 'No user found' });
+    //         } else {
+    //             res.json({ success: true, user: user });
+    //         }
+    //     });
+    // });
 
     router.get('/:id', function (req, res) {
         User.findOne({ _id: req.params.id }, function (err, user) {
@@ -368,36 +449,36 @@ module.exports = function (router) {
     });
 
 
-     router.put('/:id', upload, async (req, res) => {
+    router.put('/:id', upload, async (req, res) => {
 
-        User.findOne({_id: req.params.id}).exec((err, user) => {
-            if(req.file == null) {
+        User.findOne({ _id: req.params.id }).exec((err, user) => {
+            if (req.file == null) {
                 user.name = req.body.name
                 user.description = req.body.description
                 user.quantities = req.body.quantities
-                user.price=req.body.price
+                user.price = req.body.price
                 user.save();
                 console.log(err);
             } else {
                 user.name = req.body.name
                 user.description = req.body.description
                 user.quantities = req.body.quantities
-                user.price=req.body.price
-                user.profile_file= req.file.filename;
-                user.profile_url = "http://localhost:8009/uploads/"+ req.file.filename;
-                user.save(function(err){
-                    if(err){
+                user.price = req.body.price
+                user.profile_file = req.file.filename;
+                user.profile_url = "http://localhost:8009/uploads/" + req.file.filename;
+                user.save(function (err) {
+                    if (err) {
                         console.log(err);
                     }
                 });
                 res.send("update")
             }
         })
-    
+
 
     })
 
-   
+
 
     // router.put('/:id', function (req, res) {
     //     User.findOne({ _id: req.params.id }, function (err, user) {
@@ -430,7 +511,7 @@ module.exports = function (router) {
                 user.mobilenumber = req.body.mobilenumber;
                 user.email = req.body.email;
                 user.save(function (err) {
-                    if (err) {  
+                    if (err) {
                         console.log(err);
                     } else {
                         res.json({ success: true, message: 'Details has been updated!' });
